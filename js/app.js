@@ -49,19 +49,18 @@ function addCardToOpenedList(card) {
 // Hide or show pair of cards
 function openOrHideCard() {
   // Open pair of cards when matched
-  if(cards_opened[0].data('icon') === cards_opened[1].data('icon')) {
-    cards_opened[0][0].classList.add('true', 'match')
-    cards_opened[1][0].classList.add('true', 'match')
-    pair_matched++
-    step++
+  if($(cards_opened[0]).data('icon') === cards_opened[1].data('icon')) {
+    $(cards_opened[0]).addClass('match');
+    $(cards_opened[1]).addClass('match');
+    pair_matched++;
     delectCardFromOpenedList();
   } else {
   // Hide pair of cards when not matched
-    cards_opened[0][0].classList.add('false', 'not_match');
-    cards_opened[1][0].classList.add('false', 'not_match');
-    step++
+    $(cards_opened[0]).addClass('not_match');
+    $(cards_opened[1]).addClass('not_match');
     setTimeToHideCard();
   }
+  step++;
   countMove(step);
   voteScore(step);
 }
@@ -79,18 +78,26 @@ function delectCardFromOpenedList() {
 
 // Delete somw class when has 2 cards not matched
 function deleteClassFromElement() {
-  $(".card").removeClass("show open flipInY true false not_match");
+  $(".card").removeClass("show open flipInY not_match");
 }
 
 // Show pop-up alert game win 
 function alertGameWin() {
-  if(pair_matched === 1) {
-    $('.deck li').addClass('open true matched show flipInY')
-    setTimeout(function() {
-      clearInterval(countInterval);
-      alert("win");
-    }, 200);
-  }
+  $('.deck li').addClass('open matched show flipInY')
+  $('.pop-up').addClass('opened').html(`
+    <div class="pop-up-content">
+      <span class="win">Game win</span>
+      <span class="exit">X</span>
+    </div>
+  `);
+
+  $('.exit').on('click', function(){
+    $(this).closest('.pop-up').removeClass('opened')
+  });
+
+  setTimeout(function() {
+    clearInterval(countInterval);
+  }, 200);
 }
 
 
@@ -148,7 +155,10 @@ function renderCardWhenClick() {
     addCardToOpenedList($this);
     if(length_of_opened_list === 2) {
       openOrHideCard();
-      alertGameWin();
+      if(pair_matched === uniqueCardListSize) {
+        alertGameWin();
+        $('.card').off('click');
+      }
     }
   }) 
   // Start timer when first click
