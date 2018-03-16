@@ -12,6 +12,8 @@ let cards_opened = [];
 let length_of_opened_list = 0;
 let step = 0;
 let pair_matched = 0;
+let countInterval = null;
+let totalSeconds = 0;
 
 // Create shuffle method
 function shuffle(array) {
@@ -38,13 +40,13 @@ function renderCardsToHTML() {
   })
 }
 
-// Create function to add card to cards opened list
+// Add card to cards opened list
 function addCardToOpenedList(card) {
   cards_opened.push(card);
   length_of_opened_list = cards_opened.length;
 }
 
-// Check info about card and decide show pair of cards or hide them
+// Hide or show pair of cards
 function openOrHideCard() {
   // Open pair of cards when matched
   if(cards_opened[0].data('icon') === cards_opened[1].data('icon')) {
@@ -82,10 +84,15 @@ function deleteClassFromElement() {
 
 // Show pop-up alert game win 
 function alertGameWin() {
-  if(pair_matched === uniqueCardListSize) {
-    alert("win");
+  if(pair_matched === 1) {
+    $('.deck li').addClass('open true matched show flipInY')
+    setTimeout(function() {
+      clearInterval(countInterval);
+      alert("win");
+    }, 200);
   }
 }
+
 
 // Counting total of step
 function countMove(move) {
@@ -113,38 +120,56 @@ function voteScore(moves) {
   } 
 }
 
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
 
-// Add event listener and render card when has a pair matched.
-function renderCardWhenClick() {
+// Set timer to second and minute when start game
+function setTime(totalSeconds) {
+  const minutesLabel = document.getElementById("minutes");
+  const secondsLabel = document.getElementById("seconds");
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+// Check info about card and decide show pair of cards or hide them when click
+function renderCardWhenClick() { 
   $('.card').on('click', function() {
-    if($(this).hasClass('open show')) {
+    const $this = $(this);
+    if($this.hasClass('open show')) {
       return;
     }
-    $(this).toggleClass('flipInY open show');
-    startGame = true;
-    addCardToOpenedList($(this));
+    $this.toggleClass('flipInY open show');
+    addCardToOpenedList($this);
     if(length_of_opened_list === 2) {
       openOrHideCard();
       alertGameWin();
     }
-  })
+  }) 
+  // Start timer when first click
+  $('.card').on('click.one', function() {
+    $('.card').off('click.one');
+    countInterval = setInterval(function(){
+      ++totalSeconds;
+      setTime(totalSeconds)
+    }, 500);
+  }) 
 }
 
+// Retart game
 function restartGame() {
   $('.restart').on('click', function() {
     location.reload()
   })
 }
 
-
 // Call functions in document.ready function
 $(document).ready(function() {
-  $('.stars').html(`
-    <li class="fa fa-star"></li>
-    <li class="fa fa-star"></li>
-    <li class="fa fa-star"></li>
-  `)
-  $('.moves').html(`0 move`)
   renderCardsToHTML();
   renderCardWhenClick();
   restartGame();
