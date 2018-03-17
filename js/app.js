@@ -1,7 +1,8 @@
-// Create a list that holds all cards
-const memory_cards = ['fa-diamond', 'fa-diamond','fa-paper-plane-o', 'fa-paper-plane-o','fa-anchor',
-'fa-anchor','fa-bolt', 'fa-bolt','fa-cube', 'fa-cube','fa-leaf', 'fa-leaf','fa-bicycle', 'fa-bicycle',
-'fa-bomb', 'fa-bomb'];
+// Make an array without having to type , and ' ' after every entry
+let memory_cards = "fa-diamond fa-paper-plane-o fa-anchor fa-bolt fa-cube fa-leaf fa-bicycle fa-bomb".split(" ");
+
+// Doubles the array elements
+memory_cards = [...memory_cards, ...memory_cards] 
 
 // Store unique values of card
 const uniqueCardList = new Set(memory_cards);
@@ -12,8 +13,11 @@ let cards_opened = [];
 let length_of_opened_list = 0;
 let step = 0;
 let pair_matched = 0;
-let countInterval = null;
+let countInterval = 0;
 let totalSeconds = 0;
+let startTime = false;
+let currentTime = 0;
+let interval = null;
 
 // Create shuffle method
 function shuffle(array) {
@@ -62,7 +66,7 @@ function openOrHideCard() {
   }
   step++;
   countMove(step);
-  voteScore(step);
+  $('.stars').html(voteScore(step));
 }
 
 // Set waiting time to show or hide card when click on card
@@ -76,7 +80,7 @@ function delectCardFromOpenedList() {
   cards_opened = [];
 }
 
-// Delete somw class when has 2 cards not matched
+// Delete some class when has 2 cards not matched
 function deleteClassFromElement() {
   $(".card").removeClass("show open flipInY not_match");
 }
@@ -86,17 +90,27 @@ function alertGameWin() {
   $('.deck li').addClass('open matched show flipInY')
   $('.pop-up').addClass('opened').html(`
     <div class="pop-up-content">
-      <span class="win">Game win</span>
       <span class="exit">&times;</span>
+      <p class="win white-text">Game win<br>You used ${step} moves</p>
+      <div class="pop-up-star">${voteScore(step)}</div>
+      <p class="play_again white-text">Do you want to play again?</p><br>
+      <div class="choice white-text">
+        <span class="start-game-again">yes</span>
+        <span class="stop-game">no</span>
+      </div>
     </div>
   `);
 
-  $('.exit').on('click', function(){
-    $(this).closest('.pop-up').removeClass('opened')
+  $('.exit, .stop-game').on('click', function(){
+    $('.pop-up').removeClass('opened')
   });
 
+  $('.start-game-again').on('click', function() {
+    location.reload();
+  })
+
   setTimeout(function() {
-    clearInterval(countInterval);
+    clearInterval(interval);
   }, 200);
 }
 
@@ -112,14 +126,20 @@ function countMove(move) {
 
 // Rating star
 function voteScore(moves) {
-  if(moves > 15 && moves <= 20) {
-    $('.stars').html(`
+  if(moves >= 0 && moves <= 16) {
+    return (`
+      <li><i class="first-star fa fa-star"></i></li>
+      <li><i class="second-star fa fa-star"></i></li>
+      <li><i class="third-star fa fa-star"></i></li>
+    `)
+  } else if(moves > 16 && moves <= 20) {
+    return (`
       <li><i class="first-star fa fa-star"></i></li>
       <li><i class="second-star fa fa-star"></i></li>
       <li><i class="third-star fa fa-star-o"></i></li>
     `)
-  } else if(moves >= 20 && moves <= 25) {
-    $('.stars').html(`
+  } else {
+    return (`
       <li><i class="first-star fa fa-star"></i></li>
       <li><i class="second-star fa fa-star-o"></i></li>
       <li><i class="third-star fa fa-star-o"></i></li>
@@ -161,20 +181,36 @@ function renderCardWhenClick() {
       }
     }
   }) 
-  // Start timer when first click
+
   $('.card').on('click.one', function() {
-    $('.card').off('click.one');
-    countInterval = setInterval(function(){
-      ++totalSeconds;
-      setTime(totalSeconds)
-    }, 500);
-  }) 
+    // $('.card').off('click.one');
+    if(!interval) {
+      clearInterval(interval);
+      startTime = new Date;
+      interval = setInterval(function() {
+        currentTime = new Date;
+        totalSeconds = Math.floor((currentTime - startTime)/1000);
+        setTime(totalSeconds);
+      }, 500)
+    }
+  });
 }
 
 // Retart game
 function restartGame() {
   $('.restart').on('click', function() {
-    location.reload()
+    location.reload();
+    // startTime = new Date;
+    // totalSeconds = 0;
+    // step = 0;
+    // countMove(step);
+    // clearInterval(interval);
+    // interval = null;
+    // setTime(totalSeconds);
+    // cards_opened = [];
+    // deleteClassFromElement();
+    // $('.deck li').removeClass('open show match');
+    // renderCardWhenClick();
   })
 }
 
