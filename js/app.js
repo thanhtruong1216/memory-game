@@ -87,7 +87,7 @@ function alertGameWin() {
   $('.pop-up').addClass('opened').html(`
     <div class="pop-up-content">
       <span class="win">Game win</span>
-      <span class="exit">X</span>
+      <span class="exit">&times;</span>
     </div>
   `);
 
