@@ -108,6 +108,7 @@ h1 {
   float: right;
   cursor: pointer;
 }
+
 .pop-up {
   position: fixed;
   width: 100vw;
@@ -139,7 +140,16 @@ h1 {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
+  flex-direction: column;
+}
+
+.white-text {
   color: white;
+}
+
+.pop-up-star {
+  list-style-type: none;
+  display: flex;
 }
 
 .exit {
@@ -158,7 +168,24 @@ h1 {
 }
 
 .win {
-  position: absolute;
+  text-align: center;
+  margin: 0;
+}
+
+.choice {
+  text-transform: uppercase;
+}
+
+.start-game-again, .stop-game {
+  color: white;
+  background-color: transparent;
+  border: none;
+  padding: 0 10px;
+  border-radius: 2px;
+}
+
+.start-game-again:hover, .stop-game:hover {
+  background-color: black;
 }
 
 @media screen and (max-width: 700px) {
@@ -174,13 +201,16 @@ h1 {
     margin: 0 0 3em;
     list-style-type: none;
   }
+
   .deck .card {
     width: 80px;
     height: 80px;
   }
+
   .pop-up-content {
     width: 180px;
     height: 150px;
+    font-size: 10px;
   }
 }
 
@@ -197,19 +227,24 @@ h1 {
     margin: 0 0 3em;
     list-style-type: none;
   }
+
   .deck .card {
     width: 53px;
     height: 53px;
   }
+
   .score-panel {
     text-align: left;
     width: 200px;
     margin-bottom: 10px;
   }
+
   .pop-up-content {
     width: 200px;
-    height: 100px;
+    height: 150px;
+    font-size: 10px;
   }
+
   .deck .card.show {
     font-size: 20px;
   } 
