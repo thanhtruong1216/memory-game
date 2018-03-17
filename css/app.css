@@ -115,11 +115,12 @@ h1 {
   align-items: center;
   justify-content: center;
   display: flex;
-  background-color: orange;
+  background-color: rgb(0,0,0);
   display: none;
   top: 0;
   left: 0;
   background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.4);
 }
 
 .pop-up.opened {
@@ -127,23 +128,91 @@ h1 {
 }
 
 .pop-up-content {
-  width: 200px;
+  width: 250px;
   height: 200px;
-  background: orange;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 5px;
+  background-color: brown;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  color: white;
 }
 
 .exit {
   position: absolute;
   right: 5%;
   top: 0;
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.exit:hover, .exit:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .win {
   position: absolute;
+}
+
+@media screen and (max-width: 700px) {
+  .deck {
+    width: 350px;
+    min-height: 400px;
+    padding: 10px;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 3em;
+    list-style-type: none;
+  }
+  .deck .card {
+    width: 80px;
+    height: 80px;
+  }
+  .pop-up-content {
+    width: 180px;
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .deck {
+    width: 280px;
+    min-height: 300px;
+    padding: 10px;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 0 3em;
+    list-style-type: none;
+  }
+  .deck .card {
+    width: 53px;
+    height: 53px;
+  }
+  .score-panel {
+    text-align: left;
+    width: 200px;
+    margin-bottom: 10px;
+  }
+  .pop-up-content {
+    width: 200px;
+    height: 100px;
+  }
+  .deck .card.show {
+    font-size: 20px;
+  } 
 }
 
 
