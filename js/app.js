@@ -200,17 +200,6 @@ function renderCardWhenClick() {
 function restartGame() {
   $('.restart').on('click', function() {
     location.reload();
-    // startTime = new Date;
-    // totalSeconds = 0;
-    // step = 0;
-    // countMove(step);
-    // clearInterval(interval);
-    // interval = null;
-    // setTime(totalSeconds);
-    // cards_opened = [];
-    // deleteClassFromElement();
-    // $('.deck li').removeClass('open show match');
-    // renderCardWhenClick();
   })
 }
 
